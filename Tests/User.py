@@ -22,6 +22,7 @@ class User:
         self.speed = self.setSpeed()
         self.direction = self.setDirection()
         self.isConnected = False
+        self.isInCall = False
         self.callDuration = 0
 
     # return the location randomly
@@ -100,6 +101,10 @@ class User:
         return connectedBS
 
     def makeCall(self):
+        self.isInCall = True
         self.callDuration = self.setCallDuration()
 
+    def hangUpTheCall(self):
+        self.isInCall = False
+        self.callDuration = 0
 #   now the user must connect tot he nearest tower

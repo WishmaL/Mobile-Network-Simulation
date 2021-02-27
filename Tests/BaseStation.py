@@ -4,11 +4,9 @@ import random
 class BaseStation:
     "This is a Base Station class"
 
-    # Add the static variables here
-
-    # def __init__(self, xValue, yValue, isConnected, connectedBase, isInCall, callDuration, speed, direction, dist_BS1, dist_BS2, dist_BS3):
-    #     self.xValue = xValue
-    #     self.yValue = yValue
+    baseStation1 = (0, 5000)
+    baseStation2 = (10000, 0)
+    baseStation3 = (10000, 10000)
 
     def __init__(self, name, xValue, yValue):
 

@@ -51,33 +51,44 @@ class User:
         """Move the user until it reaches the boundary of the area"""
         #         go to up direction
         if self.direction == "up":
-            while self.yValue < 10000:
-                self.yValue += self.speed
-                time.sleep(1)
-                print(self.xValue, self.yValue)
+            # while self.yValue < 10000:
+            if self.yValue > 10000:
+                del self
+            self.yValue += self.speed
+            # time.sleep(1)
+            print(self.xValue, self.yValue)
         #         go to down direction
         elif self.direction == "down":
-            while self.yValue > 0:
-                self.yValue -= self.speed
-                time.sleep(1)
-                print(self.xValue, self.yValue)
+            # while self.yValue > 0:
+            #     self.yValue -= self.speed
+            if self.yValue < 0:
+                del self
+            self.yValue -= self.speed
+            # time.sleep(1)
+            print(self.xValue, self.yValue)
 
         #         go to left direction
         elif self.direction == "left":
-            while self.xValue > 0:
-                self.xValue -= self.speed
-                time.sleep(1)
-                print(self.xValue, self.yValue)
+            # while self.xValue > 0:
+            #     self.xValue -= self.speed
+            if self.xValue < 0:
+                del self
+            self.xValue -= self.speed
+            # time.sleep(1)
+            print(self.xValue, self.yValue)
 
         #         go to right direction
         elif self.direction == "right":
-            while self.xValue > 0:
-                self.xValue += self.speed
-                time.sleep(1)
-                print(self.xValue, self.yValue)
+            # while self.xValue > 0:
+            #     self.xValue += self.speed
+            if self.xValue >= 10000:
+                del self
+            self.xValue += self.speed
+            print(self.xValue, self.yValue)
+
+
 
         # Calc the distance
-
     def getDistance(self, baseStation):
         return (((baseStation[0] - self.xValue) ** 2) + ((baseStation[1] - self.yValue) ** 2)) ** 0.5
 
@@ -88,8 +99,8 @@ class User:
         distance3 = self.getDistance(self.baseStation3)
 
         minDistance = min(distance1, distance2, distance3)
-        print(distance1, distance2, distance3)
-        print(minDistance)
+        # print(distance1, distance2, distance3)
+        # print(minDistance)
 
         if minDistance == distance1:
             connectedBS = self.baseStation1

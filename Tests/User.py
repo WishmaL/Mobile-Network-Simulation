@@ -23,6 +23,8 @@ class User:
         self.isConnected = False
         self.isInCall = False
         self.callDuration = 0
+        self.nearestBS = self.getNearestBS()[0]
+        self.shortestDistance = self.getNearestBS()[1]
 
     # return the location randomly
     def generateLocation(self):
@@ -50,38 +52,20 @@ class User:
         """Move the user until it reaches the boundary of the area"""
         #         go to up direction
         if self.direction == "up":
-            # while self.yValue < 10000:
-            # if self.yValue > 10:
-            #     del self
             self.yValue += self.speed
-            # time.sleep(1)
             print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
         #         go to down direction
         elif self.direction == "down":
-            # while self.yValue > 0:
-            #     self.yValue -= self.speed
-            # if self.yValue < 0:
-            #     del self
             self.yValue -= self.speed
-            # time.sleep(1)
             print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
         #         go to left direction
         elif self.direction == "left":
-            # while self.xValue > 0:
-            #     self.xValue -= self.speed
-            # if self.xValue < 0:
-            #     del self
             self.xValue -= self.speed
-            # time.sleep(1)
             print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
         #         go to right direction
         elif self.direction == "right":
-            # while self.xValue > 0:
-            #     self.xValue += self.speed
-            # if self.xValue > 10:
-            #     del self
             self.xValue += self.speed
             print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
@@ -91,14 +75,13 @@ class User:
         return (((baseStation[0] - self.xValue) ** 2) + ((baseStation[1] - self.yValue) ** 2)) ** 0.5
 
     def getNearestBS(self):
+        """Get the shortest distance and the nearest tower"""
         # From base station 1
         distance1 = self.getDistance(self.baseStation1)
         distance2 = self.getDistance(self.baseStation2)
         distance3 = self.getDistance(self.baseStation3)
 
         minDistance = min(distance1, distance2, distance3)
-        # print(distance1, distance2, distance3)
-        # print(minDistance)
 
         if minDistance == distance1:
             connectedBS = self.baseStation1
@@ -107,7 +90,7 @@ class User:
         else:
             connectedBS = self.baseStation3
         self.isConnected = True
-        return connectedBS
+        return connectedBS, minDistance
 
     def makeCall(self):
         self.isInCall = True

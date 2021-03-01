@@ -23,37 +23,9 @@ for k in range(0, 3):
     print("\n")
 print("------------ ------------ ------------ \n")
 
-j = 0
-# while True:
-#     # if j == 3:
-#     #     time.sleep(0.5)
-#     #     j = 0
-#     #     print("------------\n")
-#
-#     # if sizeUpdated:
-#     print("Size of the users list: ", len(users))
-#
-#     # each user is moved for 1 step
-#     print("users[j] = ",users[j].id)
-#     # users[j].keepMove()
-#
-#     # now if the boundary is reached user must be deleted and new user must be assigned
-#     # if users[j].xValue > 10 or users[j].yValue > 10 or users[j].xValue < 0 or users[j].yValue < 0:
-#     #     users.remove(users[j])
-#     #     #       add a new user
-#     #     sizeOfUsers += 1
-#     #     users.append(User(sizeOfUsers))
-#     #     sizeUpdated = True
-#     #     ADD A FLAG HERE INDICATING THE LIST IS UPDATED
-#
-#     j += 1
-#     if j == 6:
-#         break
 h = 1
-useridx = 0;
 while h <= 10:
 
-    # while useridx < len(users):
     for user in users:
         # if sizeUpdated:
         print("Size of the users list: ", len(users))
@@ -74,7 +46,5 @@ while h <= 10:
             print("test users id = ", user.id)
             sizeUpdated = True
 
-
-        # Connect the user to a tower
-
-
+    h += 1
+    # Connect the user to a tower

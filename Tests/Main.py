@@ -76,8 +76,3 @@ while h <= 10:
             sizeUpdated = True
 
     h += 1
-
-
-print("---------------------------------------------------------------")
-for user in users:
-    print(user.id)

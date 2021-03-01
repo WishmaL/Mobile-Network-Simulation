@@ -1,4 +1,5 @@
-import random
+
+from Tests.Main import users
 
 
 class BaseStation:
@@ -15,4 +16,5 @@ class BaseStation:
         self.xValue = xValue
         self.yValue = yValue
 
+    print(users)
 

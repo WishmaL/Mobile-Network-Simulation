@@ -10,15 +10,14 @@ class User:
     baseStation2 = [10000, 0]
     baseStation3 = [10000, 10000]
 
-    # def __init__(self, xValue, yValue, isConnected, connectedBase, isInCall, callDuration, speed, direction, dist_BS1, dist_BS2, dist_BS3):
-    #     self.xValue = xValue
-    #     self.yValue = yValue
+    # def __init__(self, xValue, yValue, isConnected, connectedBase, isInCall, callDuration, speed, direction,
+    # dist_BS1, dist_BS2, dist_BS3): self.xValue = xValue self.yValue = yValue
 
-    def __init__(self, id):
+    def __init__(self, _id):
         xValue, yValue = self.generateLocation()
         self.xValue = xValue
         self.yValue = yValue
-        self.id = id
+        self.id = _id
         self.speed = self.setSpeed()
         self.direction = self.setDirection()
         self.isConnected = False
@@ -29,13 +28,13 @@ class User:
 
     # return the location randomly
     def generateLocation(self):
-        x = random.randint(0, 10000)
-        y = random.randint(0, 10000)
+        x = random.randint(0, 10)
+        y = random.randint(0, 10)
         return x, y
 
     def setSpeed(self):
         """user can be not move or move; if moves the speed is denoted in m/seconds"""
-        speed = random.randint(0, 6)
+        speed = random.randint(1, 4)
         return speed
 
     def setCallDuration(self):
@@ -46,51 +45,50 @@ class User:
     def setDirection(self):
         """Randomly pick the direction"""
         direction = ["up", "down", "left", "right"]
-        dir = direction[random.randint(0, 3)]
-        return dir
+        theDir = direction[random.randint(0, 3)]
+        return theDir
 
     def keepMove(self):
         """Move the user until it reaches the boundary of the area"""
         #         go to up direction
         if self.direction == "up":
             # while self.yValue < 10000:
-            if self.yValue > 10000:
-                del self
+            # if self.yValue > 10:
+            #     del self
             self.yValue += self.speed
             # time.sleep(1)
-            print(self.xValue, self.yValue)
+            print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
         #         go to down direction
         elif self.direction == "down":
             # while self.yValue > 0:
             #     self.yValue -= self.speed
-            if self.yValue < 0:
-                del self
+            # if self.yValue < 0:
+            #     del self
             self.yValue -= self.speed
             # time.sleep(1)
-            print(self.xValue, self.yValue)
+            print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
         #         go to left direction
         elif self.direction == "left":
             # while self.xValue > 0:
             #     self.xValue -= self.speed
-            if self.xValue < 0:
-                del self
+            # if self.xValue < 0:
+            #     del self
             self.xValue -= self.speed
             # time.sleep(1)
-            print(self.xValue, self.yValue)
+            print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
         #         go to right direction
         elif self.direction == "right":
             # while self.xValue > 0:
             #     self.xValue += self.speed
-            if self.xValue >= 10000:
-                del self
+            # if self.xValue > 10:
+            #     del self
             self.xValue += self.speed
-            print(self.xValue, self.yValue)
-
-
+            print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
         # Calc the distance
+
     def getDistance(self, baseStation):
         return (((baseStation[0] - self.xValue) ** 2) + ((baseStation[1] - self.yValue) ** 2)) ** 0.5
 

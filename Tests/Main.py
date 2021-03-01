@@ -65,7 +65,6 @@ while h <= 10:
 
         # now if the boundary is reached user must be deleted and new user must be assigned
         if user.xValue > 10 or user.yValue > 10 or user.xValue < 0 or user.yValue < 0:
-
             users.remove(user)
             print("Size of the users list after remove: ", len(users))
             #       add a new user
@@ -75,4 +74,7 @@ while h <= 10:
             print("test users id = ", user.id)
             sizeUpdated = True
 
-    h += 1
+
+        # Connect the user to a tower
+
+

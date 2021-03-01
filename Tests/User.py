@@ -24,6 +24,8 @@ class User:
         self.isConnected = False
         self.isInCall = False
         self.callDuration = 0
+        self.theNearestBS = self.getNearestBS()[0]
+        self.minDistance = self.getNearestBS()[1]
 
     # return the location randomly
     def generateLocation(self):
@@ -109,7 +111,7 @@ class User:
         else:
             connectedBS = self.baseStation3
         self.isConnected = True
-        return connectedBS
+        return connectedBS, minDistance
 
     def makeCall(self):
         self.isInCall = True

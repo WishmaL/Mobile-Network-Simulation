@@ -84,11 +84,11 @@ class User:
         minDistance = min(distance1, distance2, distance3)
 
         if minDistance == distance1:
-            connectedBS = self.baseStation1
+            connectedBS = "BS1"
         elif minDistance == distance2:
-            connectedBS = self.baseStation2
+            connectedBS = "BS2"
         else:
-            connectedBS = self.baseStation3
+            connectedBS = "BS3"
         self.isConnected = True
         return connectedBS, minDistance
 

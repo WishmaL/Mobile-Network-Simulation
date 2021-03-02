@@ -6,9 +6,12 @@ class User:
     """This is a User class"""
 
     # Add the static variables here
-    baseStation1 = [0, 5000]
-    baseStation2 = [10000, 0]
-    baseStation3 = [10000, 10000]
+    # baseStation1 = [0, 5000]
+    # baseStation2 = [10000, 0]
+    # baseStation3 = [10000, 10000]
+    baseStation1 = [0, 50]
+    baseStation2 = [100, 0]
+    baseStation3 = [100, 100]
 
     # def __init__(self, xValue, yValue, isConnected, connectedBase, isInCall, callDuration, speed, direction,
     # dist_BS1, dist_BS2, dist_BS3): self.xValue = xValue self.yValue = yValue
@@ -28,8 +31,8 @@ class User:
 
     # return the location randomly
     def generateLocation(self):
-        x = random.randint(0, 10)
-        y = random.randint(0, 10)
+        x = random.randint(0, 100)
+        y = random.randint(0, 100)
         return x, y
 
     def setSpeed(self):
@@ -53,21 +56,21 @@ class User:
         #         go to up direction
         if self.direction == "up":
             self.yValue += self.speed
-            print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
+            # print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
         #         go to down direction
         elif self.direction == "down":
             self.yValue -= self.speed
-            print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
+            # print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
         #         go to left direction
         elif self.direction == "left":
             self.xValue -= self.speed
-            print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
+            # print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
         #         go to right direction
         elif self.direction == "right":
             self.xValue += self.speed
-            print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
+            # print("User ID = ", self.id, " location: ", self.xValue, self.yValue)
 
         # Calc the distance
 
@@ -84,8 +87,10 @@ class User:
         minDistance = min(distance1, distance2, distance3)
 
         if minDistance == distance1:
+            # print("min in BS1")
             connectedBS = "BS1"
         elif minDistance == distance2:
+            # print("min in BS2")
             connectedBS = "BS2"
         else:
             connectedBS = "BS3"

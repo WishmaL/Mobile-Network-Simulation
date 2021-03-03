@@ -41,7 +41,7 @@ class User:
         return speed
 
     def setCallDuration(self):
-        """set the call duration from 60 to 300 seconds"""
+        """set the call duration from 60 to 300 milli-seconds"""
         callTime = random.randint(60, 300)
         return callTime
 

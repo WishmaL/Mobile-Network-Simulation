@@ -3,7 +3,7 @@ import time
 
 # The locations of the Base Stations
 
-# sizeOfUsers = 2
+sizeOfUsers = 29  # this indicates the id for newly adding users
 sizeUpdated = False
 # Create 100 users
 # numberOfUser = 100
@@ -37,153 +37,118 @@ for k in range(0, 30):
 
 print("------------ ------------ ------------ \n")
 
-for user in users:
-
-    # print(user.id)
-    # print(user.shortestDistance)
-    # print(user.nearestBS)
-    # Classify each user based on the nearest BS
-    if user.nearestBS == "BS1":
-        # print("min in BS2")
-        distanceTo_BS1.append(user.shortestDistance)
-        usersOf_BS1.append(user)
-    if user.nearestBS == "BS2":
-        # print("hi")
-        distanceTo_BS2.append(user.shortestDistance)
-        usersOf_BS2.append(user)
-    if user.nearestBS == "BS3":
-        # print("hi")
-        distanceTo_BS3.append(user.shortestDistance)
-        usersOf_BS3.append(user)
-
-    # Sort the list in ascending manner
-distanceTo_BS1.sort()
-distanceTo_BS2.sort()
-distanceTo_BS3.sort()
-
-print("BS1 users")
-for BS1_user in usersOf_BS1:
-    if countOfBS1 == 10:  # set 10 to 20
-        break
-    # BS1_user.isConnected = True
-    countOfBS1 += 1
-
-    print(BS1_user.id)
-
-print("\n")
-print("BS2 users")
-for BS2_user in usersOf_BS2:
-    if countOfBS2 == 10:
-        break
-    # BS2_user.isConnected = True
-    countOfBS2 += 1
-
-    print(BS2_user.id)
-
-print("\n")
-print("BS3 users")
-for BS3_user in usersOf_BS3:
-    if countOfBS3 == 10:
-        break
-    # BS3_user.isConnected = True
-    countOfBS3 += 1
-
-    print(BS3_user.id)
-
-print("\n")
-
-        #
-        # __TESTING__
-
-        # __/TESTING__
-
-        # h = 1
-# while h <= 6:
-
-# ___
 # for user in users:
+#
 #     # Classify each user based on the nearest BS
 #     if user.nearestBS == "BS1":
+#         # print("min in BS2")
 #         distanceTo_BS1.append(user.shortestDistance)
 #         usersOf_BS1.append(user)
 #     if user.nearestBS == "BS2":
+#         # print("hi")
 #         distanceTo_BS2.append(user.shortestDistance)
 #         usersOf_BS2.append(user)
 #     if user.nearestBS == "BS3":
+#         # print("hi")
 #         distanceTo_BS3.append(user.shortestDistance)
 #         usersOf_BS3.append(user)
 #
-#     # Sort the list ascendingly
-#     distanceTo_BS1.sort()
-#     distanceTo_BS2.sort()
-#     distanceTo_BS3.sort()
+#     # Sort the list in ascending manner
+# distanceTo_BS1.sort()
+# distanceTo_BS2.sort()
+# distanceTo_BS3.sort()
 
+# print("BS1 users")
 
-# set as connected for the first 20 users
+h = 0
+while h <= 6:
 
-# ___Consider usersOf_BS1, usersOf_BS2, usersOf_BS3 for main calc___
-# get the initial 20 users as the connected users
+    for user in users:
 
+        # Classify each user based on the nearest BS
+        if user.nearestBS == "BS1":
+            # print("min in BS2")
+            distanceTo_BS1.append(user.shortestDistance)
+            usersOf_BS1.append(user)
+        if user.nearestBS == "BS2":
+            # print("hi")
+            distanceTo_BS2.append(user.shortestDistance)
+            usersOf_BS2.append(user)
+        if user.nearestBS == "BS3":
+            # print("hi")
+            distanceTo_BS3.append(user.shortestDistance)
+            usersOf_BS3.append(user)
 
-# for BS1_user in usersOf_BS1:
-#     if countOfBS1 == 10:        # set 10 to 20
-#         break
-#     BS1_user.isConnected = True
-#     countOfBS1 += 1
-#
-# for BS2_user in usersOf_BS2:
-#     if countOfBS2 == 10:
-#         break
-#     BS2_user.isConnected = True
-#     countOfBS2 += 1
-#
-# for BS3_user in usersOf_BS3:
-#     if countOfBS3 == 10:
-#         break
-#     BS3_user.isConnected = True
-#     countOfBS3 += 1
+        # Sort the list in ascending manner
+    distanceTo_BS1.sort()
+    distanceTo_BS2.sort()
+    distanceTo_BS3.sort()
 
+    # get the initial 20 users as the connected users
+    for BS1_user in usersOf_BS1:
+        if countOfBS1 == 10:  # set 10 to 20
+            break
+        BS1_user.isConnected = True
+        countOfBS1 += 1
+        # BS1_user.callDuration = BS1_user.setCallDuration()
+        BS1_user.makeCall()
+        time.sleep(BS1_user.callDuration / 1000)
+        BS1_user.hangUpTheCall()
+        usersOf_BS1.remove(BS1_user)
+        # usersOf_BS1.append()
+        # print(BS1_user.id)
 
-# ___This Handles the moving users' behaviour___
-# for user in users:
-#     # if sizeUpdated:
-#     # print("Size of the users list: ", len(users))
-#     print("\n")
-#     # each user is moved for 1 step
-#     # print("users id = ", user.id)
-#     user.keepMove()
-#
-#     # now if the boundary is reached user must be deleted and new user must be assigned
-#     if user.xValue > 10 or user.yValue > 10 or user.xValue < 0 or user.yValue < 0:
-#         users.remove(user)
-#         # print("Size of the users list after remove: ", len(users))
-#         #       add a new user
-#         print("List updating")
-#         sizeOfUsers += 1
-#         newUser = User(sizeOfUsers)
-#         users.append(newUser)
-#         # print("test users id = ", user.id)
-#         sizeUpdated = True
+    # print("\n")
+    # print("BS2 users")
+    for BS2_user in usersOf_BS2:
+        if countOfBS2 == 10:
+            break
+        BS2_user.isConnected = True
+        countOfBS2 += 1
+        BS2_user.makeCall()
+        time.sleep(BS2_user.callDuration / 1000)
+        BS2_user.hangUpTheCall()
+        usersOf_BS2.remove(BS2_user)
+        # print(BS2_user.id)
+    #
+    # print("\n")
+    # print("BS3 users")
+    for BS3_user in usersOf_BS3:
+        if countOfBS3 == 10:
+            break
+        BS3_user.isConnected = True
+        countOfBS3 += 1
+        BS3_user.makeCall()
+        time.sleep(BS3_user.callDuration / 1000)
+        BS3_user.hangUpTheCall()
+        usersOf_BS3.remove(BS3_user)
 
-# assign the next user for that base Station
-# if sizeUpdated:
-#     if newUser.nearestBS == "BS1":
-#         distanceTo_BS1.append(newUser.shortestDistance)
-#         usersOf_BS1.append(newUser)
-#     if newUser.nearestBS == "BS2":
-#         distanceTo_BS2.append(newUser.shortestDistance)
-#         usersOf_BS2.append(newUser)
-#     if newUser.nearestBS == "BS3":
-#         distanceTo_BS3.append(newUser.shortestDistance)
-#         usersOf_BS3.append(newUser)
-#
-#     distanceTo_BS1.sort()
-#     distanceTo_BS2.sort()
-#     distanceTo_BS3.sort()
-#
-#     sizeUpdated = False
-#
-# h += 1
+    # ___Consider usersOf_BS1, usersOf_BS2, usersOf_BS3 for main calc___
+    # get the initial 20 users as the connected users
+
+    # ___This Handles the moving users' behaviour___
+    for user in users:
+        # if sizeUpdated:
+        # print("Size of the users list: ", len(users))
+        # print("\n")
+        # each user is moved for 1 step
+        # print("users id = ", user.id)
+        user.keepMove()
+
+        # now if the boundary is reached user must be deleted and new user must be assigned
+        if user.xValue > 10 or user.yValue > 10 or user.xValue < 0 or user.yValue < 0:
+            users.remove(user)
+            # print("Size of the users list after remove: ", len(users))
+            #       add a new user
+            # print("List updating")
+            sizeOfUsers += 1
+            newUser = User(sizeOfUsers)
+            users.append(newUser)
+            # print("test users id = ", user.id)
+            sizeUpdated = True
+
+    #
+    h += 1
 # Connect the user to a tower
 
 

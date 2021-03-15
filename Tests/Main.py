@@ -60,6 +60,7 @@ print("------------ ------------ ------------ \n")
 
 # print("BS1 users")
 
+# Following is need to set True
 h = 0
 while h <= 6:
 

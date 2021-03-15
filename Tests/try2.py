@@ -1,30 +1,23 @@
-# mylist = [0, 1, 2, 3, 4, 5, 6]
-
-# for i in mylist:
-#
-#     print(i)
-#     print(mylist.)
-#     if i == 2:
-#         mylist.remove(2) i=0
+from multiprocessing import Pool
 
 
-# for i in range(0, len(mylist)):
-#     print("i=", i)
-#     print(mylist[i])
-#
-#     if mylist[i] == 2:
-#         mylist.remove(mylist[i])
-#         mylist.append(100)
-#         print("new elemnt =", mylist[i])
-#         print("---------")
-
-# mylist.remove(2)
-# mylist.remove(3)
-# print(mylist)
+def square(x):
+    # calculate the square of the value of x
+    return x * x
 
 
-# __try out the sorting__
-temp = [12,3,2,4,2,21,4,1,4,3,64,6777,0]
-print(temp)
-temp.sort()
-print(temp)
+if __name__ == '__main__':
+    # Define the dataset
+    dataset = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+
+    # Output the dataset
+    print('Dataset: ' + str(dataset))
+
+    # Run this with a pool of 5 agents having a chunksize of 3 until finished
+    agents = 100
+    chunksize = 3
+    with Pool(processes=agents) as pool:
+        result = pool.map(square, dataset, chunksize)
+
+    # Output the result
+    print('Result:  ' + str(result))

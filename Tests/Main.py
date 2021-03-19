@@ -34,31 +34,8 @@ for k in range(0, 30):
     # print("speed = ", users[k].speed)
     # print("Initial location: ", users[k].xValue, users[k].yValue)
     # print("\n")
-
-print("------------ ------------ ------------ \n")
-
-# for user in users:
 #
-#     # Classify each user based on the nearest BS
-#     if user.nearestBS == "BS1":
-#         # print("min in BS2")
-#         distanceTo_BS1.append(user.shortestDistance)
-#         usersOf_BS1.append(user)
-#     if user.nearestBS == "BS2":
-#         # print("hi")
-#         distanceTo_BS2.append(user.shortestDistance)
-#         usersOf_BS2.append(user)
-#     if user.nearestBS == "BS3":
-#         # print("hi")
-#         distanceTo_BS3.append(user.shortestDistance)
-#         usersOf_BS3.append(user)
-#
-#     # Sort the list in ascending manner
-# distanceTo_BS1.sort()
-# distanceTo_BS2.sort()
-# distanceTo_BS3.sort()
-
-# print("BS1 users")
+# print("------------ ------------ ------------ \n")
 
 # Following is need to set True
 h = 0

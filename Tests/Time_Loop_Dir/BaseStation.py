@@ -9,11 +9,11 @@ class BaseStation:
     baseStation2 = (10000, 0)
     baseStation3 = (10000, 10000)
 
-    def __init__(self, power):
-        # self.name = name
-        # self.xValue = xValue
-        # self.yValue = yValue
-        self.power = power
+    def __init__(self, name, xValue, yValue):
+        self.name = name
+        self.xValue = xValue
+        self.yValue = yValue
+        self.power = 0
         self.n = 2
     # Sample power values = 10^-11 to 10^1 ,with odd power values
 
@@ -26,6 +26,7 @@ class BaseStation:
     #         return math.sqrt(self.power/(4*math.pi*(math.pow(10,-11))))
 
     def findMaximumRadius(self):
+        print("calcing power")
         ty = (self.power + 110)/(10 * self.n)
         return math.pow(10,ty)
 

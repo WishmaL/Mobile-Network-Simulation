@@ -2,6 +2,7 @@ import random
 import time
 import math
 
+
 class User:
     """This is a User class"""
 
@@ -28,6 +29,9 @@ class User:
         self.callDuration = 0
         self.nearestBS = self.getNearestBS()[0]
         self.shortestDistance = self.getNearestBS()[1]
+        self.distanceToBS1 = 0
+        self.distanceToBS2 = 0
+        self.distanceToBS3 = 0
 
     # return the location randomly
     def generateLocation(self):
@@ -80,16 +84,16 @@ class User:
     def getNearestBS(self):
         """Get the shortest distance and the nearest tower"""
         # From base station 1
-        distance1 = self.getDistance(self.baseStation1)
-        distance2 = self.getDistance(self.baseStation2)
-        distance3 = self.getDistance(self.baseStation3)
+        self.distanceToBS1 = self.getDistance(self.baseStation1)
+        self.distanceToBS2 = self.getDistance(self.baseStation2)
+        self.distanceToBS3 = self.getDistance(self.baseStation3)
 
-        minDistance = min(distance1, distance2, distance3)
+        minDistance = min(self.distanceToBS1, self.distanceToBS2, self.distanceToBS3)
 
-        if minDistance == distance1:
+        if minDistance == self.distanceToBS1:
             # print("min in BS1")
             connectedBS = "BS1"
-        elif minDistance == distance2:
+        elif minDistance == self.distanceToBS2:
             # print("min in BS2")
             connectedBS = "BS2"
         else:
@@ -105,15 +109,18 @@ class User:
         self.isInCall = False
         self.callDuration = 0
 
-    # def findInterfering_BSes(self):
-    #
+    def findInterfering_BSes(self):
+        self.distanceToBS1 = 0
+        self.distanceToBS2 = 0
+        self.distanceToBS3 = 0
     #
     # def calcPowerAccordingToDistance(self):
 
-    def usefulSignalPower(self, BSpower):
+    def usefulSignalPower(self, BS_power):
         distance_ = self.shortestDistance
         # Here the  constant is taken as 1
         pathLoss = (10 * 2 * math.log(distance_, 10)) + 1
-        return BSpower - pathLoss
+        return BS_power - pathLoss
 
-    # def calcInterference(self):
+    def calcInterference(self):
+        # __do from here__

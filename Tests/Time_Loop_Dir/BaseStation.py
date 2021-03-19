@@ -26,7 +26,6 @@ class BaseStation:
     #         return math.sqrt(self.power/(4*math.pi*(math.pow(10,-11))))
 
     def findMaximumRadius(self):
-        print("calcing power")
         ty = (self.power + 110)/(10 * self.n)
         return math.pow(10,ty)
 

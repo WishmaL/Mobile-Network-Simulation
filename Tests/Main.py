@@ -156,3 +156,7 @@ while h <= 6:
 # print("countOfBS1", countOfBS1)
 # print("countOfBS2", countOfBS2)
 # print("countOfBS3", countOfBS3)
+
+
+# ___WITHIN 60 USERS RANDOMLY PICK 25 USERS__
+# __ASSIGN THEM A CALL__

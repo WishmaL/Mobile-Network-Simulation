@@ -1,5 +1,6 @@
 import random
 import time
+import math
 
 
 class User:
@@ -28,6 +29,7 @@ class User:
         self.callDuration = 0
         self.nearestBS = self.getNearestBS()[0]
         self.shortestDistance = self.getNearestBS()[1]
+
 
     # return the location randomly
     def generateLocation(self):
@@ -104,4 +106,18 @@ class User:
     def hangUpTheCall(self):
         self.isInCall = False
         self.callDuration = 0
-#   now the user must connect tot he nearest tower
+
+
+    # def findInterfering_BSes(self):
+    #
+    #
+    # def calcPowerAccordingToDistance(self):
+
+
+    def usefulSignalPower(self, BSpower):
+        distance_ = self.shortestDistance
+        # Here the  constant is taken as 1
+        pathLoss = (10*2* math.log(distance_, 10)) + 1
+        return BSpower-pathLoss
+
+    # def calcInterference(self):

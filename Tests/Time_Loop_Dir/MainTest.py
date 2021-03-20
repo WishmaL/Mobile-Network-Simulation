@@ -5,23 +5,15 @@ from Tests.Time_Loop_Dir.BaseStation import BaseStation
 
 # The locations of the Base Stations
 class MainTest:
-    sizeOfUsers = 29
-
-    # def __init__(self):
-    #     MainTest.sizeOfUsers = 29
-
-    # sizeOfUsers = 29  # this indicates the id for newly adding users
+    sizeOfUsers = 99
     sizeUpdated = False
     # Create 100 users
-    # numberOfUser = 100
-
-    # users = [None] * numberOfUser
     users = []
 
     # following baseStation can only have 20 users per each
-    distanceTo_BS1 = []
-    distanceTo_BS2 = []
-    distanceTo_BS3 = []
+    distanceFrom_BS1 = []
+    distanceFrom_BS2 = []
+    distanceFrom_BS3 = []
 
     usersOf_BS1 = []
     usersOf_BS2 = []
@@ -31,12 +23,12 @@ class MainTest:
     countOfBS2 = 0
     countOfBS3 = 0
 
-    def BS_MoveTheUser(self, BS1_user, sizeOfUsers, BS_users):
-        BS1_user.keepMove()
+    def BS_MoveTheUser(self, connected_BS1_user, sizeOfUsers, BS_users):
+        connected_BS1_user.keepMove()
         isRemoved = False
         # now if the boundary is reached user must be deleted and new user must be assigned
-        if BS1_user.xValue > 10 or BS1_user.yValue > 10 or BS1_user.xValue < 0 or BS1_user.yValue < 0:
-            BS_users.remove(BS1_user)
+        if connected_BS1_user.xValue > 10000 or connected_BS1_user.yValue > 10000 or connected_BS1_user.xValue < 0 or connected_BS1_user.yValue < 0:
+            BS_users.remove(connected_BS1_user)
             isRemoved = True
             MainTest.sizeOfUsers += 1
             newUser = User(sizeOfUsers)
@@ -44,14 +36,14 @@ class MainTest:
             print("all users = ", MainTest.sizeOfUsers)
         return isRemoved
 
-    def BS_CallingProcess(self, connected_BS1_user, sizeOfUsers):
-        connected_BS1_user.isConnected = True
-        connected_BS1_user.callDuration = connected_BS1_user.setCallDuration()
-        connected_BS1_user.makeCall()
+    def BS_CallingProcess(self, connected_BS_user, sizeOfUsers, BS_users):
+        connected_BS_user.isConnected = True
+        connected_BS_user.callDuration = connected_BS_user.setCallDuration()
+        connected_BS_user.makeCall()
         # time.sleep(connected_BS1_user.callDuration / 1000)
-        connected_BS1_user.hangUpTheCall()
+        connected_BS_user.hangUpTheCall()
         print("Call ended")
-        MainTest.usersOf_BS1.remove(connected_BS1_user)
+        BS_users.remove(connected_BS_user)
         sizeOfUsers += 1
         newUser = User(sizeOfUsers)
         MainTest.users.append(newUser)
@@ -70,76 +62,85 @@ def main():
     BS_3 = BaseStation("BS3", 10000, 10000)
 
     # All the BS should have same power at each time
-    BS_1.setThePower(-50)
-    BS_2.setThePower(-60)
-    BS_3.setThePower(-70)
+    power = -50
+    BS_1.setThePower(power)
+    BS_2.setThePower(power)
+    BS_3.setThePower(power)
 
     maxRadiusOf_BS1 = BS_1.findMaximumRadius()
-    print(maxRadiusOf_BS1)
+    print("max-Radius = ", maxRadiusOf_BS1)
     maxRadiusOf_BS2 = BS_2.findMaximumRadius()
-    print(maxRadiusOf_BS2)
+    # print(maxRadiusOf_BS2)
     maxRadiusOf_BS3 = BS_3.findMaximumRadius()
-    print(maxRadiusOf_BS3)
+    # print(maxRadiusOf_BS3)
 
-    for k in range(0, 30):
+    for k in range(0, 100):
         # Create different 10 users
         MainTest.users.append(User(k))
 
     ts = 0
-    while ts <= 50:
+    # Let's consider 50 seconds
+    while ts <= 20:
 
         for user in MainTest.users:
 
             # Classify each user based on the nearest BS
             if user.nearestBS == "BS1":
-                MainTest.distanceTo_BS1.append(user.shortestDistance)
+                MainTest.distanceFrom_BS1.append(user.shortestDistance)
                 MainTest.usersOf_BS1.append(user)
             if user.nearestBS == "BS2":
-                MainTest.distanceTo_BS2.append(user.shortestDistance)
+                MainTest.distanceFrom_BS2.append(user.shortestDistance)
                 MainTest.usersOf_BS2.append(user)
             if user.nearestBS == "BS3":
-                MainTest.distanceTo_BS3.append(user.shortestDistance)
+                MainTest.distanceFrom_BS3.append(user.shortestDistance)
                 MainTest.usersOf_BS3.append(user)
 
-        MainTest.distanceTo_BS1.sort()
-        MainTest.distanceTo_BS2.sort()
-        MainTest.distanceTo_BS3.sort()
+        MainTest.distanceFrom_BS1.sort()
+        MainTest.distanceFrom_BS2.sort()
+        MainTest.distanceFrom_BS3.sort()
 
-        for (connected_BS1_user, connected_BS2_user, connected_BS3_user) in zip(MainTest.usersOf_BS1[:10],
-                                                                                MainTest.usersOf_BS2[:10],
-                                                                                MainTest.usersOf_BS3[:10]):
+        # Since each base-station can connect 20 maximum users
+        for (connected_BS1_user, connected_BS2_user, connected_BS3_user) in zip(MainTest.usersOf_BS1[:20],
+                                                                                MainTest.usersOf_BS2[:20],
+                                                                                MainTest.usersOf_BS3[:20]):
 
-            # for connected_BS1_user in usersOf_BS1[:10]:
+            # Users who connected to Base Station 1
+            # ----------------------------------------------------------------------------------------------------------
             hasRemoved1 = MainTest.BS_MoveTheUser(mt, connected_BS1_user, MainTest.sizeOfUsers, MainTest.usersOf_BS1)
-            if hasRemoved1:
-                continue
-            else:
-                print("bs1 call")
-                MainTest.BS_CallingProcess(mt, connected_BS1_user, MainTest.sizeOfUsers)
-            # now if the boundary is reached user must be deleted and new user must be assigned
+            # If the user is in the boundary he is not removed
+            if ~hasRemoved1:
+                
+                print(connected_BS1_user.id, " is calling <BS1 user>")
+                MainTest.BS_CallingProcess(mt, connected_BS1_user, MainTest.sizeOfUsers, MainTest.usersOf_BS1)
 
+            # ----------------------------------------------------------------------------------------------------------
+            # Users who connected to Base Station 2
             hasRemoved2 = MainTest.BS_MoveTheUser(mt, connected_BS2_user, MainTest.sizeOfUsers, MainTest.usersOf_BS2)
-            if hasRemoved2:
-                continue
-            else:
-                print("bs2 call")
-                MainTest.BS_CallingProcess(mt, connected_BS2_user, MainTest.sizeOfUsers)
+            if ~hasRemoved2:
+                #     continue
+                # else:
+                print(connected_BS1_user.id, " is calling <BS2 user>")
+                MainTest.BS_CallingProcess(mt, connected_BS2_user, MainTest.sizeOfUsers, MainTest.usersOf_BS2)
 
+            # ----------------------------------------------------------------------------------------------------------
+            # Users who connected to Base Station 3
             hasRemoved3 = MainTest.BS_MoveTheUser(mt, connected_BS3_user, MainTest.sizeOfUsers, MainTest.usersOf_BS3)
-            if hasRemoved3:
-                continue
-            else:
-                print("bs3 call")
-                MainTest.BS_CallingProcess(mt, connected_BS3_user, MainTest.sizeOfUsers)
+            if ~hasRemoved3:
+                #     continue
+                # else:
+                print(connected_BS1_user.id, " is calling <BS3 user>")
+                MainTest.BS_CallingProcess(mt, connected_BS3_user, MainTest.sizeOfUsers, MainTest.usersOf_BS3)
 
-        #
+        # continue the timing in the loop
         ts += 1
 
-    # Connect the user to a tower
-
-    # print("countOfBS1", countOfBS1)
-    # print("countOfBS2", countOfBS2)
-    # print("countOfBS3", countOfBS3)
+        # For the graphical representation, take randomly 25 people from the connected people as active (in call
+        # state people)
+        #
+        #     findInterfering_BaseStations need to be called first
+        #     calcInterference is next
+        #     usefulSignalPower is next
+        #     get SINR
 
     # ___WITHIN 60 USERS RANDOMLY PICK 25 USERS__
     # __ASSIGN THEM A CALL__

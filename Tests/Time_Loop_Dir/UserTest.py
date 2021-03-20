@@ -10,9 +10,11 @@ class User:
     # baseStation1 = [0, 5000]
     # baseStation2 = [10000, 0]
     # baseStation3 = [10000, 10000]
-    baseStation1 = [0, 50]
-    baseStation2 = [100, 0]
-    baseStation3 = [100, 100]
+    baseStation1 = [0, 5000]
+    baseStation2 = [10000, 0]
+    baseStation3 = [10000, 10000]
+
+    interfering_BS_list = []
 
     # def __init__(self, xValue, yValue, isConnected, connectedBase, isInCall, callDuration, speed, direction,
     # dist_BS1, dist_BS2, dist_BS3): self.xValue = xValue self.yValue = yValue
@@ -35,8 +37,8 @@ class User:
 
     # return the location randomly
     def generateLocation(self):
-        x = random.randint(0, 100)
-        y = random.randint(0, 100)
+        x = random.randint(0, 10000)
+        y = random.randint(0, 10000)
         return x, y
 
     def setSpeed(self):
@@ -101,6 +103,8 @@ class User:
         self.isConnected = True
         return connectedBS, minDistance
 
+    # ___Call related calculations___
+
     def makeCall(self):
         self.isInCall = True
         self.callDuration = self.setCallDuration()
@@ -109,18 +113,41 @@ class User:
         self.isInCall = False
         self.callDuration = 0
 
-    def findInterfering_BSes(self):
-        self.distanceToBS1 = 0
-        self.distanceToBS2 = 0
-        self.distanceToBS3 = 0
-    #
-    # def calcPowerAccordingToDistance(self):
+    # ___Power related calculations___
+
+    def findInterfering_BaseStations(self, Max_BS_radius):
+        if self.distanceToBS1 < Max_BS_radius:
+            self.interfering_BS_list.append("BS1")
+        if self.distanceToBS2 < Max_BS_radius:
+            self.interfering_BS_list.append("BS2")
+        if self.distanceToBS3 < Max_BS_radius:
+            self.interfering_BS_list.append("BS3")
+
+    # For following methods the BS_power is equal for each base station
+    def getPowerAccordingToDistance(self, distance, BS_power):
+        # Here the  constant is taken as 1
+        pathLoss = (10 * 2 * math.log(distance, 10)) + 1
+        return BS_power - pathLoss
 
     def usefulSignalPower(self, BS_power):
+        """Calculate the useful signal power"""
         distance_ = self.shortestDistance
         # Here the  constant is taken as 1
         pathLoss = (10 * 2 * math.log(distance_, 10)) + 1
         return BS_power - pathLoss
 
-    def calcInterference(self):
-        # __do from here__
+    def calcInterference(self, BS_power):
+        """Calculate the total interference"""
+        totalInterference = 0
+        if "BS1" in self.interfering_BS_list:
+            totalInterference += self.getPowerAccordingToDistance(self.distanceToBS1, BS_power)
+        if "BS2" in self.interfering_BS_list:
+            totalInterference += self.getPowerAccordingToDistance(self.distanceToBS2, BS_power)
+        if "BS3" in self.interfering_BS_list:
+            totalInterference += self.getPowerAccordingToDistance(self.distanceToBS3, BS_power)
+        return totalInterference
+
+    def get_SINR(self, BS_power):
+        """FI the SINR > 1 then the call can be made"""
+        SINR = self.usefulSignalPower(BS_power) / self.calcInterference(BS_power)
+        return SINR

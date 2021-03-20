@@ -34,6 +34,7 @@ class User:
         self.distanceToBS1 = 0
         self.distanceToBS2 = 0
         self.distanceToBS3 = 0
+        # self.SINR = 0
 
     # return the location randomly
     def generateLocation(self):
@@ -145,7 +146,7 @@ class User:
             totalInterference += self.getPowerAccordingToDistance(self.distanceToBS2, BS_power)
         if "BS3" in self.interfering_BS_list:
             totalInterference += self.getPowerAccordingToDistance(self.distanceToBS3, BS_power)
-        return totalInterference
+        return totalInterference + 1
 
     def get_SINR(self, BS_power):
         """FI the SINR > 1 then the call can be made"""

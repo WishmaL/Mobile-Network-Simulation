@@ -57,16 +57,29 @@ import bisect
 # for k in dict3.keys():
 #     print(k)
 
-import itertools
-import collections
+# import itertools
+# import collections
+#
+# d = collections.OrderedDict((('foo', 'bar'), (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd')))
+# x = itertools.islice(d.items(), 0, 2)
+#
+# # for key, value in x:
+# #     print (key, value)
+#
+# d = {1: 1, 2: 9, 3: 4}
+#
+# w = list(d.keys())[:2]
+# print(w)
 
-d = collections.OrderedDict((('foo', 'bar'), (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd')))
-x = itertools.islice(d.items(), 0, 2)
+list1 = [10, 20, 30]
 
-# for key, value in x:
-#     print (key, value)
 
-d = {1: 1, 2: 9, 3: 4}
+def addNextUser(restOfUserList):
+    newUser = restOfUserList[0]
+    restOfUserList.remove(restOfUserList[0])
+    for i in restOfUserList:
+        print(i)
+    return newUser
 
-w = list(d.keys())[:2]
-print(w)
+
+print("NEw User",addNextUser(list1))

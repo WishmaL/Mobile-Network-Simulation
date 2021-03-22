@@ -27,20 +27,20 @@ class MainTest:
     countOfBS2 = 0
     countOfBS3 = 0
 
-    def BS_MoveTheUser(self, connected_BS1_user, sizeOfUsers, BS_users):
+    def BS_MoveTheUser(self, connected_BS1_user, BS_users):
         connected_BS1_user.keepMove()
         isRemoved = False
         # now if the boundary is reached user must be deleted and new user must be assigned
         if connected_BS1_user.xValue > 10000 or connected_BS1_user.yValue > 10000 or connected_BS1_user.xValue < 0 or connected_BS1_user.yValue < 0:
             BS_users.remove(connected_BS1_user)
             isRemoved = True
-            MainTest.sizeOfUsers += 1
-            newUser = User(sizeOfUsers)
-            MainTest.users.append(newUser)
+            # MainTest.sizeOfUsers += 1
+            # newUser = User(MainTest.sizeOfUsers)
+            # MainTest.users.append(newUser)
             # print("all users = ", MainTest.sizeOfUsers)
         return isRemoved
 
-    def BS_CallingProcess(self, connected_BS_user, sizeOfUsers, BS_users):
+    def BS_CallingProcess(self, connected_BS_user, BS_users):
         connected_BS_user.isConnected = True
         connected_BS_user.callDuration = connected_BS_user.setCallDuration()
         connected_BS_user.makeCall()
@@ -48,9 +48,18 @@ class MainTest:
         connected_BS_user.hangUpTheCall()
         # print("Call ended")
         BS_users.remove(connected_BS_user)
-        sizeOfUsers += 1
-        newUser = User(sizeOfUsers)
-        MainTest.users.append(newUser)
+        # isRemoved = True
+        # MainTest.sizeOfUsers += 1
+        # newUser = User(MainTest.sizeOfUsers)
+        # MainTest.users.append(newUser)
+
+    def Diff(self, li1, li2):
+        return list(list(set(li1) - set(li2)) + list(set(li2) - set(li1)))
+
+    def addNextUser(self, restOfUserList):
+        newUser = restOfUserList[0]
+        restOfUserList.remove(restOfUserList[0])
+        return newUser
 
     # def Merge(self, dict1, dict2, dict3):
     #     # res = {**dict1, **dict2, **dict3}
@@ -178,14 +187,21 @@ def main():
         print("len(connectedUsers): ", len(connectedUsers))
         # Pick 25 users randomly from the connected 60 users
         activeUsers = random.sample(connectedUsers, 25)
+        restOfConnectedUsers = mt.Diff(connectedUsers, activeUsers)
+
+        # print(len(restOfConnectedUsers))
 
         print("Active user count initially: ", len(activeUsers))
         for activeUser in activeUsers:
-            hasRemovedFromTheRegion = MainTest.BS_MoveTheUser(mt, activeUser, MainTest.sizeOfUsers, activeUsers)
+            hasRemovedFromTheRegion = MainTest.BS_MoveTheUser(mt, activeUser, activeUsers)
+            if hasRemovedFromTheRegion:
+                activeUsers.append(mt.addNextUser(restOfConnectedUsers))
+
             # If the user is in the boundary he is not removed
             if ~hasRemovedFromTheRegion:
                 # print(activeUser.id, " is calling Active user")
-                MainTest.BS_CallingProcess(mt, activeUser, MainTest.sizeOfUsers, activeUsers)
+                MainTest.BS_CallingProcess(mt, activeUser, activeUsers)
+                activeUsers.append(mt.addNextUser(restOfConnectedUsers))
 
             activeUser.findInterfering_BaseStations(maxRadiusOf_BS)
             # activeUser.calcInterference(power)
@@ -198,30 +214,6 @@ def main():
                 totalNumberOfUsers += 1
 
         print("Active user count eventually: ", len(activeUsers))
-
-        # # Here the keys represent the users
-        # for activeUser in activeUsers.keys():
-        #     # Users who connected to Base Station 1
-        #     # ----------------------------------------------------------------------------------------------------------
-        #     hasRemovedRomTheRegion = MainTest.BS_MoveTheUser(mt, activeUser, MainTest.sizeOfUsers, MainTest.usersOf_BS1)
-        #     # If the user is in the boundary he is not removed
-        #     if ~hasRemovedRomTheRegion:
-        #         print(activeUser.id, " is calling Active user")
-        #         MainTest.BS_CallingProcess(mt, activeUser, MainTest.sizeOfUsers, activeUsers)
-        #
-        #     activeUser.findInterfering_BaseStations(maxRadiusOf_BS)
-        #     # activeUser.calcInterference(power)
-        #     # activeUser.usefulSignalPower(power)
-        #     sinr = activeUser.get_SINR(power)
-        #     print("SINR for user ", activeUser.id, " = ", sinr)
-
-        # For the graphical representation, take randomly 25 people from the connected people as active (in call
-        # state people)
-        #
-        #     findInterfering_BaseStations need to be called first
-        #     calcInterference is next
-        #     usefulSignalPower is next
-        #     get SINR
 
         # continue the timing in the loop
         ts += 1

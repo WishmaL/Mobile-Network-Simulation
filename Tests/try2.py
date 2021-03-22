@@ -71,15 +71,30 @@ import bisect
 # w = list(d.keys())[:2]
 # print(w)
 
-list1 = [10, 20, 30]
+# list1 = [10, 20, 30]
+#
+#
+# def addNextUser(restOfUserList):
+#     newUser = restOfUserList[0]
+#     restOfUserList.remove(restOfUserList[0])
+#     for i in restOfUserList:
+#         print(i)
+#     return newUser
+#
+#
+# print("NEw User",addNextUser(list1))
 
+# Python code to demonstrate addition of tuple to a set.
+# s = set()
+# t = ('f', 'o')
+#
+# # adding tuple t to set s.
+# s.add(t)
+#
+# print(s)
+power = []
+for i in range(-10, -90, -5):
+    power.append(i)
 
-def addNextUser(restOfUserList):
-    newUser = restOfUserList[0]
-    restOfUserList.remove(restOfUserList[0])
-    for i in restOfUserList:
-        print(i)
-    return newUser
-
-
-print("NEw User",addNextUser(list1))
+print(power)
+print("Power in ra")

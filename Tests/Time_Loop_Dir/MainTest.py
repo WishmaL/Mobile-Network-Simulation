@@ -1,6 +1,7 @@
 import random
 import bisect
 import itertools
+import matplotlib.pyplot as plt
 
 from Tests.Time_Loop_Dir.UserTest import User
 import time
@@ -96,129 +97,152 @@ def main():
         MainTest.users.append(User(k))
 
     ts = 0
-    power = -35
+    # power = -90
+    activeUsersFreqList = []
+    powerList = []
+
     # Let's consider 50 seconds
-    while ts <= 2:
-        power += 5
+    while ts <= 0:
 
-        BS_1.setThePower(power)
-        BS_2.setThePower(power)
-        BS_3.setThePower(power)
+        # Following is for plotting purposes
+        for power in range(-30, -130, -5):
+            totalNumberOfActiveUsers = 0
+            powerList.append(power)
 
-        maxRadiusOf_BS = BS_1.findMaximumRadius()
-        print("max-Radius = ", maxRadiusOf_BS)
-        totalNumberOfUsers = 0
+            BS_1.setThePower(power)
+            BS_2.setThePower(power)
+            BS_3.setThePower(power)
 
-        for user in MainTest.users:
+            maxRadiusOf_BS = BS_1.findMaximumRadius()
+            # print("max-Radius = ", maxRadiusOf_BS)
 
-            # Classify each user based on the nearest BS with satisfying connection
-            if user.nearestBS == "BS1" and user.shortestDistance <= maxRadiusOf_BS:
-                # MainTest.distanceFrom_BS1.append(user.shortestDistance)
-                # MainTest.usersOf_BS1.append(user)
-                MainTest.usersOf_BS1[user] = user.shortestDistance
+            for user in MainTest.users:
 
-            if user.nearestBS == "BS2" and user.shortestDistance <= maxRadiusOf_BS:
-                # MainTest.distanceFrom_BS2.append(user.shortestDistance)
-                MainTest.usersOf_BS2[user] = user.shortestDistance
-            if user.nearestBS == "BS3" and user.shortestDistance <= maxRadiusOf_BS:
-                # MainTest.distanceFrom_BS3.append(user.shortestDistance)
-                MainTest.usersOf_BS3[user] = user.shortestDistance
+                # Classify each user based on the nearest BS with satisfying connection
+                # if user.nearestBS == "BS1" and user.shortestDistance <= maxRadiusOf_BS:
+                if user.nearestBS == "BS1":
+                    MainTest.usersOf_BS1[user] = user.shortestDistance
 
-        # MainTest.distanceFrom_BS1.sort()
-        # MainTest.distanceFrom_BS2.sort()
-        # MainTest.distanceFrom_BS3.sort()
+                # if user.nearestBS == "BS2" and user.shortestDistance <= maxRadiusOf_BS:
+                if user.nearestBS == "BS2":
+                    MainTest.usersOf_BS2[user] = user.shortestDistance
+                # if user.nearestBS == "BS3" and user.shortestDistance <= maxRadiusOf_BS:
+                if user.nearestBS == "BS3":
+                    MainTest.usersOf_BS3[user] = user.shortestDistance
 
-        # Since each base-station can connect 20 maximum users
-        # for (connected_BS1_user, connected_BS2_user, connected_BS3_user) in zip(MainTest.usersOf_BS1[:20],
-        #                                                                         MainTest.usersOf_BS2[:20],
-        #                                                                         MainTest.usersOf_BS3[:20]):
-        #
-        #     # Users who connected to Base Station 1
-        #     # ----------------------------------------------------------------------------------------------------------
-        #     hasRemoved1 = MainTest.BS_MoveTheUser(mt, connected_BS1_user, MainTest.sizeOfUsers, MainTest.usersOf_BS1)
-        #     # If the user is in the boundary he is not removed
-        #     if ~hasRemoved1:
-        #
-        #         # print(connected_BS1_user.id, " is calling <BS1 user>")
-        #         # MainTest.BS_CallingProcess(mt, connected_BS1_user, MainTest.sizeOfUsers, MainTest.usersOf_BS1)
-        #
-        #     # ----------------------------------------------------------------------------------------------------------
-        #     # Users who connected to Base Station 2
-        #     hasRemoved2 = MainTest.BS_MoveTheUser(mt, connected_BS2_user, MainTest.sizeOfUsers, MainTest.usersOf_BS2)
-        #     if ~hasRemoved2:
-        #         #     continue
-        #         # else:
-        #         # print(connected_BS1_user.id, " is calling <BS2 user>")
-        #         # MainTest.BS_CallingProcess(mt, connected_BS2_user, MainTest.sizeOfUsers, MainTest.usersOf_BS2)
-        #
-        #     # ----------------------------------------------------------------------------------------------------------
-        #     # Users who connected to Base Station 3
-        #     hasRemoved3 = MainTest.BS_MoveTheUser(mt, connected_BS3_user, MainTest.sizeOfUsers, MainTest.usersOf_BS3)
-        #     if ~hasRemoved3:
-        #         #     continue
-        #         # else:
-        #         # print(connected_BS1_user.id, " is calling <BS3 user>")
-        #         # MainTest.BS_CallingProcess(mt, connected_BS3_user, MainTest.sizeOfUsers, MainTest.usersOf_BS3)
+            # MainTest.distanceFrom_BS1.sort()
+            # MainTest.distanceFrom_BS2.sort()
+            # MainTest.distanceFrom_BS3.sort()
 
-        # For SB1
-        sorted_tuples = sorted(MainTest.usersOf_BS1.items(), key=lambda item: item[1])
-        # print(sorted_tuples)
-        sorted_BS1_users = {k: v for k, v in sorted_tuples}
+            # Since each base-station can connect 20 maximum users
+            # for (connected_BS1_user, connected_BS2_user, connected_BS3_user) in zip(MainTest.usersOf_BS1[:20],
+            #                                                                         MainTest.usersOf_BS2[:20],
+            #                                                                         MainTest.usersOf_BS3[:20]):
+            #
+            #     # Users who connected to Base Station 1
+            #     # ----------------------------------------------------------------------------------------------------------
+            #     hasRemoved1 = MainTest.BS_MoveTheUser(mt, connected_BS1_user, MainTest.sizeOfUsers, MainTest.usersOf_BS1)
+            #     # If the user is in the boundary he is not removed
+            #     if ~hasRemoved1:
+            #
+            #         # print(connected_BS1_user.id, " is calling <BS1 user>")
+            #         # MainTest.BS_CallingProcess(mt, connected_BS1_user, MainTest.sizeOfUsers, MainTest.usersOf_BS1)
+            #
+            #     # ----------------------------------------------------------------------------------------------------------
+            #     # Users who connected to Base Station 2
+            #     hasRemoved2 = MainTest.BS_MoveTheUser(mt, connected_BS2_user, MainTest.sizeOfUsers, MainTest.usersOf_BS2)
+            #     if ~hasRemoved2:
+            #         #     continue
+            #         # else:
+            #         # print(connected_BS1_user.id, " is calling <BS2 user>")
+            #         # MainTest.BS_CallingProcess(mt, connected_BS2_user, MainTest.sizeOfUsers, MainTest.usersOf_BS2)
+            #
+            #     # ----------------------------------------------------------------------------------------------------------
+            #     # Users who connected to Base Station 3
+            #     hasRemoved3 = MainTest.BS_MoveTheUser(mt, connected_BS3_user, MainTest.sizeOfUsers, MainTest.usersOf_BS3)
+            #     if ~hasRemoved3:
+            #         #     continue
+            #         # else:
+            #         # print(connected_BS1_user.id, " is calling <BS3 user>")
+            #         # MainTest.BS_CallingProcess(mt, connected_BS3_user, MainTest.sizeOfUsers, MainTest.usersOf_BS3)
 
-        # For SB2
-        sorted_tuples = sorted(MainTest.usersOf_BS2.items(), key=lambda item: item[1])
-        # print(sorted_tuples)
-        sorted_BS2_users = {k: v for k, v in sorted_tuples}
+            # For SB1
+            sorted_tuples = sorted(MainTest.usersOf_BS1.items(), key=lambda item: item[1])
+            # print(sorted_tuples)
+            sorted_BS1_users = {k: v for k, v in sorted_tuples}
 
-        # For SB1
-        sorted_tuples = sorted(MainTest.usersOf_BS3.items(), key=lambda item: item[1])
-        # print(sorted_tuples)
-        sorted_BS3_users = {k: v for k, v in sorted_tuples}
+            # For SB2
+            sorted_tuples = sorted(MainTest.usersOf_BS2.items(), key=lambda item: item[1])
+            # print(sorted_tuples)
+            sorted_BS2_users = {k: v for k, v in sorted_tuples}
 
-        # Extract first 20 users from the three dictionaries into three lists
+            # For SB1
+            sorted_tuples = sorted(MainTest.usersOf_BS3.items(), key=lambda item: item[1])
+            # print(sorted_tuples)
+            sorted_BS3_users = {k: v for k, v in sorted_tuples}
 
-        sorted_BS1_users20 = list(sorted_BS1_users.keys())[:20]
-        sorted_BS2_users20 = list(sorted_BS2_users.keys())[:20]
-        sorted_BS3_users20 = list(sorted_BS3_users.keys())[:20]
+            # Extract first 20 users from the three dictionaries into three lists
 
-        # print(w)
+            sorted_BS1_users20 = list(sorted_BS1_users.keys())[:20]
+            sorted_BS2_users20 = list(sorted_BS2_users.keys())[:20]
+            sorted_BS3_users20 = list(sorted_BS3_users.keys())[:20]
 
-        connectedUsers = sorted_BS1_users20 + sorted_BS2_users20 + sorted_BS3_users20
-        print("len(connectedUsers): ", len(connectedUsers))
-        # Pick 25 users randomly from the connected 60 users
-        activeUsers = random.sample(connectedUsers, 25)
-        restOfConnectedUsers = mt.Diff(connectedUsers, activeUsers)
+            # print(w)
 
-        # print(len(restOfConnectedUsers))
+            connectedUsers = sorted_BS1_users20 + sorted_BS2_users20 + sorted_BS3_users20
+            # print("len(connectedUsers): ", len(connectedUsers))
+            # Pick 25 users randomly from the connected 60 users
+            activeUsers = random.sample(connectedUsers, 25)
+            restOfConnectedUsers = mt.Diff(connectedUsers, activeUsers)
 
-        print("Active user count initially: ", len(activeUsers))
-        for activeUser in activeUsers:
-            hasRemovedFromTheRegion = MainTest.BS_MoveTheUser(mt, activeUser, activeUsers)
-            if hasRemovedFromTheRegion:
-                activeUsers.append(mt.addNextUser(restOfConnectedUsers))
+            # print("\n")
 
-            # If the user is in the boundary he is not removed
-            if ~hasRemovedFromTheRegion:
-                # print(activeUser.id, " is calling Active user")
-                MainTest.BS_CallingProcess(mt, activeUser, activeUsers)
-                activeUsers.append(mt.addNextUser(restOfConnectedUsers))
+            # print("Active user count initially: ", len(activeUsers))
+            for activeUser in activeUsers:
+                hasRemovedFromTheRegion = MainTest.BS_MoveTheUser(mt, activeUser, activeUsers)
+                if hasRemovedFromTheRegion:
+                    activeUsers.append(mt.addNextUser(restOfConnectedUsers))
 
-            activeUser.findInterfering_BaseStations(maxRadiusOf_BS)
-            # activeUser.calcInterference(power)
-            # activeUser.usefulSignalPower(power)
-            radius = BS_1.findMaximumRadius()
+                # If the user is in the boundary he is not removed
+                if ~hasRemovedFromTheRegion:
+                    # print(activeUser.id, " is calling Active user")
+                    MainTest.BS_CallingProcess(mt, activeUser, activeUsers)
+                    activeUsers.append(mt.addNextUser(restOfConnectedUsers))
 
-            sinr = activeUser.get_SINR(power, radius)
-            print("SINR for user ID =", activeUser.id, " = ", sinr)
-            if sinr > 1:
-                totalNumberOfUsers += 1
+                activeUser.findInterfering_BaseStations(maxRadiusOf_BS)
+                # activeUser.calcInterference(power)
+                # activeUser.usefulSignalPower(power)
+                radius = BS_1.findMaximumRadius()
 
-        print("Active user count eventually: ", len(activeUsers))
+                sinr = activeUser.get_SINR(power, radius)
+                # print("location: x=", activeUser.xValue, " y=", activeUser.yValue)
+                # print("Distance to shortest: ", activeUser.shortestDistance)
+                # print("Distance to BS1", activeUser.distanceToBS1)
+                # print("Distance to BS2", activeUser.distanceToBS2)
+                # print("Distance to BS3", activeUser.distanceToBS3)
+                # print("SINR for user ID =", activeUser.id, " = ", sinr)
+                # print("\n")
+                if sinr >= 1:
+                    totalNumberOfActiveUsers += 1
+                    # print("_____________SINR > 1____________")
 
+            print("Active user count eventually: ", totalNumberOfActiveUsers)
+            activeUsersFreqList.append(totalNumberOfActiveUsers)
         # continue the timing in the loop
         ts += 1
         print("-------------------------")
 
+    plt.plot(powerList, activeUsersFreqList, color='green', linestyle='dashed', linewidth=3,
+             marker='o', markerfacecolor='blue', markersize=12)
+    # naming the x axis
+    plt.xlabel('Base Station Power')
+    # naming the y axis
+    plt.ylabel('Number of active users')
+    # giving a title to my graph
+    plt.title('Two lines on same graph!')
+
+    # function to show the plot
+    plt.show()
     # ___WITHIN 60 USERS RANDOMLY PICK 25 USERS__
     # __ASSIGN THEM A CALL__
 

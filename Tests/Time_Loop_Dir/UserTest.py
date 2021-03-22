@@ -24,8 +24,8 @@ class User:
         self.xValue = xValue
         self.yValue = yValue
         #
-        # self.xValue = 9900
-        # self.yValue = 9900
+        # self.xValue = 6610
+        # self.yValue = 8114
 
         self.id = _id
         self.speed = self.setSpeed()
@@ -38,7 +38,7 @@ class User:
         self.distanceToBS1 = 0
         self.distanceToBS2 = 0
         self.distanceToBS3 = 0
-        self.interfering_BS_list = []
+        self.interfering_BS_list = set()
         # self.SINR = 0
 
     # return the location randomly
@@ -135,22 +135,27 @@ class User:
         return BS_power - pathLoss
 
     def findInterfering_BaseStations(self, Max_BS_radius):
+
+        self.distanceToBS1 = self.getDistance(self.baseStation1)
+        self.distanceToBS2 = self.getDistance(self.baseStation2)
+        self.distanceToBS3 = self.getDistance(self.baseStation3)
+
         if self.nearestBS == "BS1":
             if self.distanceToBS2 < Max_BS_radius:
-                self.interfering_BS_list.append("BS2")
+                # print("inside BS1, distance to BS2= ", self.distanceToBS2)
+                self.interfering_BS_list.add("BS2")
             if self.distanceToBS3 < Max_BS_radius:
-                self.interfering_BS_list.append("BS3")
+                self.interfering_BS_list.add("BS3")
         if self.nearestBS == "BS2":
             if self.distanceToBS1 < Max_BS_radius:
-                self.interfering_BS_list.append("BS1")
+                self.interfering_BS_list.add("BS1")
             if self.distanceToBS3 < Max_BS_radius:
-                self.interfering_BS_list.append("BS3")
+                self.interfering_BS_list.add("BS3")
         if self.nearestBS == "BS3":
             if self.distanceToBS1 < Max_BS_radius:
-                self.interfering_BS_list.append("BS1")
+                self.interfering_BS_list.add("BS1")
             if self.distanceToBS2 < Max_BS_radius:
-                self.interfering_BS_list.append("BS2")
-
+                self.interfering_BS_list.add("BS2")
 
     def calcInterference(self, BS_power, radius):
         """Calculate the total interference"""
@@ -162,6 +167,11 @@ class User:
         totalInterference = 0
         self.findInterfering_BaseStations(radius)
 
+        # print("len of interfering_BS_list: ", len(self.interfering_BS_list))
+        # print("Total interfering list is displays below")
+        # for i in self.interfering_BS_list:
+        # print("BaseStation Name: ",i)
+
         if "BS1" in self.interfering_BS_list:
             totalInterference += self.getPowerAccordingToDistance(self.distanceToBS1, BS_power)
         if "BS2" in self.interfering_BS_list:
@@ -170,10 +180,16 @@ class User:
             totalInterference += self.getPowerAccordingToDistance(self.distanceToBS3, BS_power)
 
         # if "BS1" or "BS2" or "BS3" not in self.interfering_BS_list:
-
+        # print("Total interference: ", totalInterference)
         return totalInterference + self.N
 
     def get_SINR(self, BS_power, radius):
+        # print("radius: ", radius)
         """FI the SINR > 1 then the call can be made"""
-        SINR = self.usefulSignalPower(BS_power) / self.calcInterference(BS_power, radius)
+        useful_signal_power = self.usefulSignalPower(BS_power)
+        # if useful_signal_power >= -110:
+        SINR = useful_signal_power / self.calcInterference(BS_power, radius)
+        # else:
+        #     SINR = 0
+
         return SINR

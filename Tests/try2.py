@@ -57,3 +57,16 @@ import bisect
 # for k in dict3.keys():
 #     print(k)
 
+import itertools
+import collections
+
+d = collections.OrderedDict((('foo', 'bar'), (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd')))
+x = itertools.islice(d.items(), 0, 2)
+
+# for key, value in x:
+#     print (key, value)
+
+d = {1: 1, 2: 9, 3: 4}
+
+w = list(d.keys())[:2]
+print(w)

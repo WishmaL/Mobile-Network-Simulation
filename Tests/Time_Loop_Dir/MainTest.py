@@ -37,7 +37,7 @@ class MainTest:
             MainTest.sizeOfUsers += 1
             newUser = User(sizeOfUsers)
             MainTest.users.append(newUser)
-            print("all users = ", MainTest.sizeOfUsers)
+            # print("all users = ", MainTest.sizeOfUsers)
         return isRemoved
 
     def BS_CallingProcess(self, connected_BS_user, sizeOfUsers, BS_users):
@@ -46,7 +46,7 @@ class MainTest:
         connected_BS_user.makeCall()
         # time.sleep(connected_BS1_user.callDuration / 1000)
         connected_BS_user.hangUpTheCall()
-        print("Call ended")
+        # print("Call ended")
         BS_users.remove(connected_BS_user)
         sizeOfUsers += 1
         newUser = User(sizeOfUsers)
@@ -63,59 +63,55 @@ class MainTest:
 
     # The simulation will be done for 1000 seconds
 
-    def merge_three_dicts(self, dict1, dict2, dict3):
-        """Given two dictionaries, merge them into a new dict as a shallow copy."""
-        # z1 = x.copy()
-        # z1.update(y)
-        # z1.update(z)
-        res = {**dict1, **dict2, **dict3}
-        return res
+    # def merge_three_dicts(self, dict1, dict2, dict3):
+    #     """Given two dictionaries, merge them into a new dict as a shallow copy."""
+    #     # z1 = x.copy()
+    #     # z1.update(y)
+    #     # z1.update(z)
+    #     res = {**dict1, **dict2, **dict3}
+    #     return res
 
 
 def main():
     mt = MainTest()
 
     # Setting up the base stations properties
-    BS_1 = BaseStation("BS1", 0, 5000)
-    BS_2 = BaseStation("BS2", 10000, 0)
-    BS_3 = BaseStation("BS3", 10000, 10000)
+    BS_1 = BaseStation("BS1", 5000, 10000)
+    BS_2 = BaseStation("BS2", 0, 0)
+    BS_3 = BaseStation("BS3", 10000, 0)
 
     # All the BS should have same power at each time
-    power = -50
-    BS_1.setThePower(power)
-    BS_2.setThePower(power)
-    BS_3.setThePower(power)
-
-    maxRadiusOf_BS = BS_1.findMaximumRadius()
-    print("max-Radius = ", maxRadiusOf_BS)
-    maxRadiusOf_BS2 = BS_2.findMaximumRadius()
-    # print(maxRadiusOf_BS2)
-    maxRadiusOf_BS3 = BS_3.findMaximumRadius()
-    # print(maxRadiusOf_BS3)
 
     for k in range(0, 100):
         # Create different 10 users
         MainTest.users.append(User(k))
 
     ts = 0
+    power = -35
     # Let's consider 50 seconds
     while ts <= 2:
+        power += 5
+
+        BS_1.setThePower(power)
+        BS_2.setThePower(power)
+        BS_3.setThePower(power)
+
+        maxRadiusOf_BS = BS_1.findMaximumRadius()
+        print("max-Radius = ", maxRadiusOf_BS)
+        totalNumberOfUsers = 0
 
         for user in MainTest.users:
 
-            # Classify each user based on the nearest BS
-
-            #   Dictionary => key = user, value = distance
-
-            if user.nearestBS == "BS1":
+            # Classify each user based on the nearest BS with satisfying connection
+            if user.nearestBS == "BS1" and user.shortestDistance <= maxRadiusOf_BS:
                 # MainTest.distanceFrom_BS1.append(user.shortestDistance)
                 # MainTest.usersOf_BS1.append(user)
                 MainTest.usersOf_BS1[user] = user.shortestDistance
 
-            if user.nearestBS == "BS2":
+            if user.nearestBS == "BS2" and user.shortestDistance <= maxRadiusOf_BS:
                 # MainTest.distanceFrom_BS2.append(user.shortestDistance)
                 MainTest.usersOf_BS2[user] = user.shortestDistance
-            if user.nearestBS == "BS3":
+            if user.nearestBS == "BS3" and user.shortestDistance <= maxRadiusOf_BS:
                 # MainTest.distanceFrom_BS3.append(user.shortestDistance)
                 MainTest.usersOf_BS3[user] = user.shortestDistance
 
@@ -179,25 +175,29 @@ def main():
         # print(w)
 
         connectedUsers = sorted_BS1_users20 + sorted_BS2_users20 + sorted_BS3_users20
-
-        # Get 25 users randomly from the connected 60 users
+        print("len(connectedUsers): ", len(connectedUsers))
+        # Pick 25 users randomly from the connected 60 users
         activeUsers = random.sample(connectedUsers, 25)
 
-        # __TEST THIS #1__
+        print("Active user count initially: ", len(activeUsers))
         for activeUser in activeUsers:
-            # Users who connected to Base Station 1
-            # ----------------------------------------------------------------------------------------------------------
             hasRemovedFromTheRegion = MainTest.BS_MoveTheUser(mt, activeUser, MainTest.sizeOfUsers, activeUsers)
             # If the user is in the boundary he is not removed
             if ~hasRemovedFromTheRegion:
-                print(activeUser.id, " is calling Active user")
+                # print(activeUser.id, " is calling Active user")
                 MainTest.BS_CallingProcess(mt, activeUser, MainTest.sizeOfUsers, activeUsers)
 
-            # activeUser.findInterfering_BaseStations(maxRadiusOf_BS)
+            activeUser.findInterfering_BaseStations(maxRadiusOf_BS)
             # activeUser.calcInterference(power)
             # activeUser.usefulSignalPower(power)
-            sinr = activeUser.get_SINR(power)
+            radius = BS_1.findMaximumRadius()
+
+            sinr = activeUser.get_SINR(power, radius)
             print("SINR for user ID =", activeUser.id, " = ", sinr)
+            if sinr > 1:
+                totalNumberOfUsers += 1
+
+        print("Active user count eventually: ", len(activeUsers))
 
         # # Here the keys represent the users
         # for activeUser in activeUsers.keys():

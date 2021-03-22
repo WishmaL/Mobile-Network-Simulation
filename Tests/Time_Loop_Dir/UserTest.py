@@ -10,11 +10,11 @@ class User:
     # baseStation1 = [0, 5000]
     # baseStation2 = [10000, 0]
     # baseStation3 = [10000, 10000]
-    baseStation1 = [0, 5000]
-    baseStation2 = [10000, 0]
-    baseStation3 = [10000, 10000]
-
-    interfering_BS_list = []
+    baseStation1 = [5000, 10000]
+    baseStation2 = [0, 0]
+    baseStation3 = [10000, 0]
+    # Noise
+    N = -1
 
     # def __init__(self, xValue, yValue, isConnected, connectedBase, isInCall, callDuration, speed, direction,
     # dist_BS1, dist_BS2, dist_BS3): self.xValue = xValue self.yValue = yValue
@@ -23,6 +23,10 @@ class User:
         xValue, yValue = self.generateLocation()
         self.xValue = xValue
         self.yValue = yValue
+        #
+        # self.xValue = 9900
+        # self.yValue = 9900
+
         self.id = _id
         self.speed = self.setSpeed()
         self.direction = self.setDirection()
@@ -34,6 +38,7 @@ class User:
         self.distanceToBS1 = 0
         self.distanceToBS2 = 0
         self.distanceToBS3 = 0
+        self.interfering_BS_list = []
         # self.SINR = 0
 
     # return the location randomly
@@ -116,39 +121,59 @@ class User:
 
     # ___Power related calculations___
 
-    def findInterfering_BaseStations(self, Max_BS_radius):
-        if self.distanceToBS1 < Max_BS_radius:
-            self.interfering_BS_list.append("BS1")
-        if self.distanceToBS2 < Max_BS_radius:
-            self.interfering_BS_list.append("BS2")
-        if self.distanceToBS3 < Max_BS_radius:
-            self.interfering_BS_list.append("BS3")
-
     # For following methods the BS_power is equal for each base station
     def getPowerAccordingToDistance(self, distance, BS_power):
         # Here the  constant is taken as 1
-        pathLoss = (10 * 2 * math.log(distance, 10)) + 1
+        pathLoss = (10 * 2 * math.log(distance, 10)) + 0
         return BS_power - pathLoss
 
     def usefulSignalPower(self, BS_power):
         """Calculate the useful signal power"""
         distance_ = self.shortestDistance
         # Here the  constant is taken as 1
-        pathLoss = (10 * 2 * math.log(distance_, 10)) + 1
+        pathLoss = (10 * 2 * math.log(distance_, 10)) + 0
         return BS_power - pathLoss
 
-    def calcInterference(self, BS_power):
+    def findInterfering_BaseStations(self, Max_BS_radius):
+        if self.nearestBS == "BS1":
+            if self.distanceToBS2 < Max_BS_radius:
+                self.interfering_BS_list.append("BS2")
+            if self.distanceToBS3 < Max_BS_radius:
+                self.interfering_BS_list.append("BS3")
+        if self.nearestBS == "BS2":
+            if self.distanceToBS1 < Max_BS_radius:
+                self.interfering_BS_list.append("BS1")
+            if self.distanceToBS3 < Max_BS_radius:
+                self.interfering_BS_list.append("BS3")
+        if self.nearestBS == "BS3":
+            if self.distanceToBS1 < Max_BS_radius:
+                self.interfering_BS_list.append("BS1")
+            if self.distanceToBS2 < Max_BS_radius:
+                self.interfering_BS_list.append("BS2")
+
+
+    def calcInterference(self, BS_power, radius):
         """Calculate the total interference"""
+
+        self.distanceToBS1 = self.getDistance(self.baseStation1)
+        self.distanceToBS2 = self.getDistance(self.baseStation2)
+        self.distanceToBS3 = self.getDistance(self.baseStation3)
+
         totalInterference = 0
+        self.findInterfering_BaseStations(radius)
+
         if "BS1" in self.interfering_BS_list:
             totalInterference += self.getPowerAccordingToDistance(self.distanceToBS1, BS_power)
         if "BS2" in self.interfering_BS_list:
             totalInterference += self.getPowerAccordingToDistance(self.distanceToBS2, BS_power)
         if "BS3" in self.interfering_BS_list:
             totalInterference += self.getPowerAccordingToDistance(self.distanceToBS3, BS_power)
-        return totalInterference + 1
 
-    def get_SINR(self, BS_power):
+        # if "BS1" or "BS2" or "BS3" not in self.interfering_BS_list:
+
+        return totalInterference + self.N
+
+    def get_SINR(self, BS_power, radius):
         """FI the SINR > 1 then the call can be made"""
-        SINR = self.usefulSignalPower(BS_power) / self.calcInterference(BS_power)
+        SINR = self.usefulSignalPower(BS_power) / self.calcInterference(BS_power, radius)
         return SINR

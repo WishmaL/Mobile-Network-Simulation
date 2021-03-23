@@ -65,6 +65,21 @@ class MainTest:
         restOfUserList.remove(restOfUserList[0])
         return newUser
 
+    def getOptimalSignalStrength(self, powerList, activeUsersFreqList):
+        """Return the mean signal strength values that give maximum number of active users"""
+        idxes = []
+        maxValue = max(activeUsersFreqList)
+        for i in activeUsersFreqList:
+            if i == maxValue:
+                idxes.append(activeUsersFreqList.index(i))
+
+        Xvalues = []
+        for i in idxes:
+            Xvalues.append(powerList[i])
+
+        avg = sum(Xvalues) / len(Xvalues)
+        return avg
+
 
 def main():
     """The main method that runs the whole program"""
@@ -185,6 +200,9 @@ def main():
 
     # function to show the plot
     plt.show()
+    print("\n\n")
+    optimal_signal_strength = mt.getOptimalSignalStrength(powerList, activeUsersFreqList)
+    print("Optimal Signal Strength = ", optimal_signal_strength)
 
 
 # __RUN THE MAIN PROGRAMME__

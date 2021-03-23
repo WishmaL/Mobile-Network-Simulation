@@ -1,4 +1,3 @@
-from Tests.Main import users
 import math
 
 
@@ -15,19 +14,12 @@ class BaseStation:
         self.yValue = yValue
         self.power = 0
         self.n = 2
-    # Sample power values = 10^-11 to 10^1 ,with odd power values
 
     def setThePower(self, power):
+        """Set the power of a base station"""
         self.power = power
 
-    # Let's find the radius
-    #     def findRadius(self):
-    #         """unit: meters"""
-    #         return math.sqrt(self.power/(4*math.pi*(math.pow(10,-11))))
-
     def findMaximumRadius(self):
-        ty = (self.power + 110)/(10 * self.n)
-        return math.pow(10,ty)
-
-
-
+        """Find the radius that allows to make a call"""
+        ty = (self.power + 110) / (10 * self.n)
+        return math.pow(10, ty)

@@ -2,7 +2,6 @@ import random
 import time
 import math
 
-
 class User:
     """This is a User class"""
 
@@ -29,7 +28,6 @@ class User:
         self.callDuration = 0
         self.nearestBS = self.getNearestBS()[0]
         self.shortestDistance = self.getNearestBS()[1]
-
 
     # return the location randomly
     def generateLocation(self):
@@ -107,17 +105,15 @@ class User:
         self.isInCall = False
         self.callDuration = 0
 
-
     # def findInterfering_BSes(self):
     #
     #
     # def calcPowerAccordingToDistance(self):
 
-
     def usefulSignalPower(self, BSpower):
         distance_ = self.shortestDistance
         # Here the  constant is taken as 1
-        pathLoss = (10*2* math.log(distance_, 10)) + 1
-        return BSpower-pathLoss
+        pathLoss = (10 * 2 * math.log(distance_, 10)) + 1
+        return BSpower - pathLoss
 
     # def calcInterference(self):
